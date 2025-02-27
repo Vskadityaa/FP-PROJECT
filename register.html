@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Form</title>
+  <link rel="stylesheet" href="register.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="left-panel"></div>
+
+    <div class="form-container">
+      <h1>Sign up</h1>
+      <p>Fill in your credentials and click on the Sign up button</p>
+
+      <form id="register-form">
+        <div class="input-group">
+          <input type="text" id="first-name" placeholder="First Name" required>
+          <input type="text" id="last-name" placeholder="Last Name" required>
+        </div>
+
+        <input type="email" id="email" placeholder="Your email address" required>
+        <input type="password" id="password" placeholder="Your password" required>
+
+        <button type="submit">Sign Up</button>
+      </form>
+
+      <p class="login-text">Already have an account? <a href="login.html">Sign in</a></p>
+    </div>
+  </div>
+
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZP3rqkKxr7js7XjjeUdPNy9McSXw-dYY",
+      authDomain: "fp-project-76c3a.firebaseapp.com",
+      projectId: "fp-project-76c3a",
+      storageBucket: "fp-project-76c3a.appspot.com",
+      messagingSenderId: "1002695896109",
+      appId: "1:1002695896109:web:6e71dfe80cc2b6659c5ca4",
+      measurementId: "G-C61Y4FG8SV"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Handle user registration
+    document.getElementById("register-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const firstName = document.getElementById("first-name").value;
+      const lastName = document.getElementById("last-name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Successful registration
+          alert("Registration successful!");
+          console.log("User:", userCredential.user);
+
+          // Redirect to login page after successful sign-up
+          window.location.href = "login.html";
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
+    });
+  </script>
+
+</body>
+</html>

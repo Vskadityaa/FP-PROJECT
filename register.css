@@ -1,0 +1,113 @@
+/* General Styles */
+body {
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: white;
+  }
+  
+  /* Main Container */
+  .container {
+    width: 1150px;
+    height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 60px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  /* Left Blue Panel */
+  .left-panel {
+    width: 50%;
+    height: 100%;
+    background: #C0DBEA;
+    border-radius: 40px 0 0 40px;
+    
+  }
+  
+  /* Form Container */
+  .form-container {
+    width: 50%;
+    padding: 40px;
+    text-align: center;
+  }
+  
+  .form-container h1 {
+    font-size: 48px;
+    color: #3F3D56;
+    margin-bottom: 10px;
+  }
+  
+  .form-container p {
+    font-size: 16px;
+    color: #333745;
+  }
+  
+  /* Input Fields */
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .input-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .input-group input {
+    flex: 1;
+  }
+  
+  input {
+    width: 100%;
+    padding: 15px;
+    font-size: 14px;
+    border: 1px solid #F3F3F3;
+    border-radius: 8px;
+    background: #FCFCFC;
+    margin-bottom: 15px;
+  }
+  
+  /* Sign Up Button */
+  button {
+    width: 100%;
+    padding: 15px;
+    background: #92D3F4;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  button:hover {
+    background: #74c0e8;
+  }
+  
+  /* Login Redirect */
+  .login-text {
+    margin-top: 15px;
+  }
+  
+  .login-text a {
+    color: #AFCAD9;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .login-text a:hover {
+    text-decoration: underline;
+  }
+  

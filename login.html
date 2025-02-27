@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <img src="https://via.placeholder.com/146x114" alt="Logo" class="logo">
+            <h2><b>Welcome back !!!</b></h2>
+            <h1>Log In</h1>
+            
+            <form id="login-form">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+                
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                
+                <a href="#" class="forgot-password">Forgot Password?</a>
+                
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            
+            <div class="social-login">
+                <p>or continue with</p>
+                <div class="social-icons">
+                    <div class="icon google"></div>
+                    <div class="icon apple"></div>
+                    <div class="icon facebook"></div>
+                </div>
+            </div>
+            
+            <p class="signup">Don’t have an account yet? <a href="register.html">Sign up for free</a></p>
+        </div>
+        <div class="right-section"></div>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBZP3rqkKxr7js7XjjeUdPNy9McSXw-dYY",
+            authDomain: "fp-project-76c3a.firebaseapp.com",
+            projectId: "fp-project-76c3a",
+            storageBucket: "fp-project-76c3a.appspot.com",
+            messagingSenderId: "1002695896109",
+            appId: "1:1002695896109:web:6e71dfe80cc2b6659c5ca4",
+            measurementId: "G-C61Y4FG8SV"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Handle Login
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Login successful
+                    alert("Login successful!");
+                    console.log("User:", userCredential.user);
+                    window.location.href = "home.html"; // Redirect to home page
+                })
+                .catch((error) => {
+                    alert("Login failed: ");
+                });
+        });
+    </script>
+
+</body>
+</html>
