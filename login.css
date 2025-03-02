@@ -59,7 +59,7 @@ input {
 }
 
 .forgot-password {
-    position:
+    position: absolute;
     text-align: right;
     font-size: 15px;
     color:black;

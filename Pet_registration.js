@@ -46,3 +46,48 @@ app.post("/registerPet", async (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Move the following code to a separate function or ensure it runs after the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('submit').addEventListener('click', function() {
+        // Get values from input fields
+        const address = document.getElementById('address').value;
+        const phone = document.getElementById('phone').value;
+        const petName = document.getElementById('petName').value;
+        const petBreed = document.getElementById('petBreed').value;
+        const ownerName = document.getElementById('ownerName').value;
+        const petColor = document.getElementById('petColor').value;
+
+        // Create a QR code with the collected data
+        const qrData = `Address: ${address}, Phone: ${phone}, Pet Name: ${petName}, Pet Breed: ${petBreed}, Owner Name: ${ownerName}, Pet Colour: ${petColor}`;
+        const qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: qrData,
+            width: 128,
+            height: 128,
+        });
+
+        // Enable the download button
+        document.getElementById('downloadQR').disabled = false;
+    });
+});
+
+function generateQRCode() {
+    // Get values from input fields
+    const address = document.getElementById('address').value;
+    const phone = document.getElementById('phone').value;
+    const petName = document.getElementById('petName').value;
+    const petBreed = document.getElementById('petBreed').value;
+    const ownerName = document.getElementById('ownerName').value;
+    const petColor = document.getElementById('petColor').value;
+
+    // Create a QR code with the collected data
+    const qrData = `Address: ${address}, Phone: ${phone}, Pet Name: ${petName}, Pet Breed: ${petBreed}, Owner Name: ${ownerName}, Pet Colour: ${petColor}`;
+    const qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: qrData,
+        width: 128,
+        height: 128,
+    });
+
+    // Enable the download button
+    document.getElementById('downloadQR').disabled = false;
+}
