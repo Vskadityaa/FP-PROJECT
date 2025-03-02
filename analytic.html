@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics</title>
+    <link rel="stylesheet" href="./analytic.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBHrBpHNePrpVG8Z5ahCY8Av8Y4A-6t9Ac",
+            authDomain: "pet-registration-e9d6f.firebaseapp.com",
+            databaseURL: "https://pet-registration-e9d6f-default-rtdb.firebaseio.com",
+            projectId: "pet-registration-e9d6f",
+            storageBucket: "pet-registration-e9d6f.appspot.com",
+            messagingSenderId: "220116952151",
+            appId: "1:220116952151:web:88565249899c7a60e9ef12"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Fetch Data and Update UI
+        function fetchData() {
+            const petsRef = ref(db, "pets");
+            onValue(petsRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    let pets = snapshot.val();
+                    let totalPets = 0;
+                    let dogs = 0, cats = 0, others = 0;
+
+                    Object.values(pets).forEach(pet => {
+                        totalPets++;
+                        let breed = pet.petBreed ? pet.petBreed.toLowerCase() : "";
+
+                        if (breed.includes("dog")) {
+                            dogs++;
+                        } else if (breed.includes("cat")) {
+                            cats++;
+                        } else {
+                            others++;
+                        }
+                    });
+
+                    // Update UI
+                    document.getElementById("totalPets").innerText = totalPets;
+                    document.getElementById("dogsCount").innerText = dogs;
+                    document.getElementById("catsCount").innerText = cats;
+                    document.getElementById("othersCount").innerText = others;
+                    document.getElementById("qrsGenerated").innerText = totalPets; // Assuming one QR per pet
+                } else {
+                    console.log("No pets found in database.");
+                }
+            });
+        }
+
+        // Run fetch on page load
+        window.onload = fetchData;
+    </script>
+</head>
+<body>
+    <img class="logo" src="assets/pet-logo.png" alt="logo">
+    <p class="title">Analytics</p>
+
+    <div class="Box1" style="top: 261px; left: 281px; position: absolute;">
+        <div class="rectangle"></div>
+        <p class="boxTitle" style="top: 28px; left: 28px; position: absolute;">Total Pets</p>
+        <p class="boxMetric" id="totalPets" style="top: 93px; left: 28px; position: absolute;">0</p>
+    </div>
+    <div class="Box2" style="top: 261px; left: 581px; position: absolute;">
+        <div class="rectangle"></div>
+        <p class="boxTitle" style="top: 28px; left: 28px; position: absolute;">QRs Generated</p>
+        <p class="boxMetric" id="qrsGenerated" style="top: 93px; left: 28px; position: absolute;">0</p>
+    </div>
+    <div class="Box3" style="top: 261px; left: 881px; position: absolute;">
+        <div class="rectangle"></div>
+        <p class="boxTitle" style="top: 28px; left: 28px; position: absolute;">Dogs</p>
+        <p class="boxMetric" id="dogsCount" style="top: 93px; left: 28px; position: absolute;">0</p>
+    </div>
+    <div class="Box4" style="top: 526px; left: 281px; position: absolute;">
+        <div class="rectangle"></div>
+        <p class="boxTitle" style="top: 28px; left: 28px; position: absolute;">Cats</p>
+        <p class="boxMetric" id="catsCount" style="top: 93px; left: 28px; position: absolute;">0</p>
+    </div>
+    <div class="Box5" style="top: 526px; left: 581px; position: absolute;">
+        <div class="rectangle"></div>
+        <p class="boxTitle" style="top: 28px; left: 28px; position: absolute;">Others</p>
+        <p class="boxMetric" id="othersCount" style="top: 93px; left: 28px; position: absolute;">0</p>
+    </div>
+
+    <footer>
+        <div class="footerrectangle"></div>
+        <p class="footerHeading">Pet-QR</p>
+        <p class="tagline">Stay Connected</p>
+        <p class="footerHelp">Help</p>
+        <p class="helpTerms">Terms and Conditions</p>
+        <p class="helpPrivacy">Privacy Policy</p>
+        <p class="footerContact">Contact Us</p>
+        <p class="footerEmail">info@pet-qr.com</p>
+    </footer>
+</body>
+</html>
