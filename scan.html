@@ -24,24 +24,25 @@
         const urlParams = new URLSearchParams(window.location.search);
         const petId = urlParams.get("petId");
 
-        if (petId) {
+        async function fetchPetData() {
+            if (!petId) {
+                document.getElementById("petInfo").innerHTML = "<p>Invalid QR Code.</p>";
+                return;
+            }
+
             const petRef = ref(db, "pets/" + petId);
 
-            get(petRef).then((snapshot) => {
+            try {
+                const snapshot = await get(petRef);
+
                 if (snapshot.exists()) {
                     const petData = snapshot.val();
                     let currentScanCount = petData.scanCount || 0;
 
                     // Update the scan count in Firebase
-                    update(petRef, { scanCount: currentScanCount + 1 })
-                        .then(() => {
-                            console.log("Scan count updated successfully!");
-                        })
-                        .catch((error) => {
-                            console.error("Error updating scan count:", error);
-                        });
+                    await update(petRef, { scanCount: currentScanCount + 1 });
 
-                    // Display pet details
+                    // Display updated pet details on the webpage
                     document.getElementById("petInfo").innerHTML = `
                         <h2>Pet Details</h2>
                         <p><strong>Name:</strong> ${petData.petName}</p>
@@ -52,16 +53,18 @@
                         <p><strong>Color:</strong> ${petData.petColor}</p>
                         <p><strong>Scanned:</strong> ${currentScanCount + 1} times</p>
                     `;
+
+                    console.log("Scan count updated successfully!");
                 } else {
                     document.getElementById("petInfo").innerHTML = "<p>Pet not found!</p>";
                 }
-            }).catch((error) => {
+            } catch (error) {
                 console.error("Error fetching pet data:", error);
                 document.getElementById("petInfo").innerHTML = "<p>Error loading pet data.</p>";
-            });
-        } else {
-            document.getElementById("petInfo").innerHTML = "<p>Invalid QR Code.</p>";
+            }
         }
+
+        fetchPetData();
     </script>
 </head>
 <body>
