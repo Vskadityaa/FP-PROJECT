@@ -21,8 +21,7 @@ header {
     font-weight: bold;
     color: #000000;
     background-image: "a1.jpg";
-    
-    
+
 }
 .logo img{
     height:50px;
@@ -75,28 +74,8 @@ nav ul li a {
     color: #555;
     margin: 20px 0;
 }
-.blue-box {
-    width: 350px;
-    height: 680px;
-    position: right;
-    right: 0px;
 
-    top: 0;
-    background: #14348E;
-}
-.rotated-div {
-    width:350px;
-    height: 650px;
-    position: absolute;
-    left:92%;
 
-    top: 350.96px;
-    transform: rotate(-110.91deg);
-    transform-origin:0;
-    background: linear-gradient(180deg, #3CB7DE 0%, #3FA3FF 100%);
-    border-top-left-radius: 400px;
-    border-top-right-radius: 490px;
-}
 
 button {
     background: black;
@@ -105,10 +84,11 @@ button {
     border: none;
     font-size: 20px;
     cursor: pointer;
-    border-radius: 7px;
+    border-radius: 40px;
     bottom: 20px; /* Moves it 20px from the bottom */
     right: 50px; 
-    
+    margin-left: 50px;
+    margin-top: 20px;
     
 }
 
@@ -119,7 +99,6 @@ button:hover {
 /* Image Section */
 .image img {
     max-width: 100%;
-    border-radius: 20px;
 }
 
 /* Sub-section */
@@ -157,5 +136,9 @@ footer {
 
 .logo {
     height: 50px;
-    width: 50   ;
+    width: 50px;
+}
+
+main{
+    margin-left: 20px;
 }
