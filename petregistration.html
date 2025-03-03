@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Import Poppins font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <title>QR Code Generator</title>
+    <title>QR Code Generator & Scanner</title>
     <link rel="stylesheet" href="./petregistration.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
@@ -39,18 +37,12 @@
                 <label for="petColor">Pet Color</label>
                 <input type="text" id="petColor" class="input-field" placeholder="Enter Pet Color">
             </div>
-
             <button class="button" id="submit">Create QR Code</button>
         </section>
 
         <section id="qrcode-section" class="qrcode-section">
             <div id="qrcode"></div>
-            <button class="button" id="downloadQR" style="display:none;">Download QR Code</button>
         </section>
-
-        <footer class="footer">
-            <p></p>
-        </footer>
     </main>
 
     <script type="module">
@@ -70,13 +62,11 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        const generateUniqueId = () => {
-            return "pet_" + new Date().getTime();
-        };
+        const generateUniqueId = () => "pet_" + new Date().getTime();
 
         document.getElementById("submit").addEventListener("click", function (e) {
             e.preventDefault();
-
+            
             const address = document.getElementById("address").value;
             const phone = document.getElementById("phone").value;
             const petName = document.getElementById("petName").value;
@@ -90,57 +80,30 @@
             }
 
             const petId = generateUniqueId();
-
-            set(ref(db, "pets/" + petId), {
+            const petData = {
                 petId,
                 address,
                 phone,
                 petName,
                 petBreed,
                 ownerName,
-                petColor
-            }).then(() => {
-                alert("Pet Registered Successfully!");
-                generateQRCode(petId, petName, ownerName, phone, petBreed, petColor, address);
+                petColor,
+                scanCount: 0
+            };
+
+            set(ref(db, "pets/" + petId), petData).then(() => {
+                generateQRCode(petId);
             }).catch((error) => {
                 console.error("Error saving pet data:", error);
                 alert("Error registering pet!");
             });
         });
 
-        const generateQRCode = (petId, petName, ownerName, phone, petBreed, petColor, address) => {
-            const qrCodeContainer = document.getElementById("qrcode");
-            const qrData = `Pet ID: ${petId}
-Owner: ${ownerName}
-Phone: ${phone}
-Pet Name: ${petName}
-Breed: ${petBreed}
-Color: ${petColor}
-Address: ${address}`;
-
-            qrCodeContainer.innerHTML = "";
-
-            new QRCode(qrCodeContainer, {
-                text: qrData,
-                width: 200,
-                height: 200
-            });
-
-            document.getElementById("downloadQR").style.display = "block";
+        const generateQRCode = (petId) => {
+            document.getElementById("qrcode").innerHTML = "";
+            const scanURL = `https://yourwebsite.com/scan.html?petId=${petId}`;
+            new QRCode(document.getElementById("qrcode"), { text: scanURL, width: 200, height: 200 });
         };
-
-        document.getElementById("downloadQR").addEventListener("click", function () {
-            const qrCodeCanvas = document.querySelector("#qrcode canvas");
-
-            if (qrCodeCanvas) {
-                const link = document.createElement("a");
-                link.href = qrCodeCanvas.toDataURL("image/png");
-                link.download = "Pet_QR_Code.png";
-                link.click();
-            } else {
-                alert("Generate a QR code first!");
-            }
-        });
     </script>
 </body>
 </html>
