@@ -31,6 +31,9 @@
             }
 
             const petRef = ref(db, "pets/" + petId);
+            const lastScanTime = localStorage.getItem(`lastScan_${petId}`);
+            const now = Date.now();
+            const SCAN_DELAY = 5 * 60 * 1000; // 5 minutes
 
             try {
                 const snapshot = await get(petRef);
@@ -39,10 +42,17 @@
                     const petData = snapshot.val();
                     let currentScanCount = petData.scanCount || 0;
 
-                    // Update the scan count in Firebase
-                    await update(petRef, { scanCount: currentScanCount + 1 });
+                    // Check if the last scan was more than SCAN_DELAY ago
+                    if (!lastScanTime || now - lastScanTime > SCAN_DELAY) {
+                        await update(petRef, { scanCount: currentScanCount + 1 });
+                        localStorage.setItem(`lastScan_${petId}`, now);
+                        currentScanCount++; // Update the displayed value
+                        console.log("Scan count updated!");
+                    } else {
+                        console.log("Scan count not updated (refresh detected).");
+                    }
 
-                    // Display updated pet details on the webpage
+                    // Display pet details
                     document.getElementById("petInfo").innerHTML = `
                         <h2>Pet Details</h2>
                         <p><strong>Name:</strong> ${petData.petName}</p>
@@ -51,10 +61,8 @@
                         <p><strong>Phone:</strong> ${petData.phone}</p>
                         <p><strong>Address:</strong> ${petData.address}</p>
                         <p><strong>Color:</strong> ${petData.petColor}</p>
-                        <p><strong>Scanned:</strong> ${currentScanCount + 1} times</p>
+                        <p><strong>Scanned:</strong> ${currentScanCount} times</p>
                     `;
-
-                    console.log("Scan count updated successfully!");
                 } else {
                     document.getElementById("petInfo").innerHTML = "<p>Pet not found!</p>";
                 }
