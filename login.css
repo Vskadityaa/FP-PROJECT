@@ -60,7 +60,8 @@ input {
 
 .forgot-password {
     position: absolute;
-    text-align: right;
+    top : 627px;
+    left: 220px;
     font-size: 15px;
     color:black;
     opacity: 0.5;
