@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <title>Registration Form</title>
   <link rel="stylesheet" href="register.css">
 </head>
@@ -22,7 +21,9 @@
           <input type="text" id="last-name" placeholder="Last Name" required>
         </div>
 
+        <input type="text" id="username" placeholder="Username" required>
         <input type="email" id="email" placeholder="Your email address" required>
+        <input type="text" id="phone" placeholder="Phone Number" required>
         <input type="password" id="password" placeholder="Your password" required>
 
         <button type="submit">Sign Up</button>
@@ -36,6 +37,7 @@
     // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
 
     // Firebase configuration
     const firebaseConfig = {
@@ -45,30 +47,47 @@
       storageBucket: "fp-project-76c3a.appspot.com",
       messagingSenderId: "1002695896109",
       appId: "1:1002695896109:web:6e71dfe80cc2b6659c5ca4",
-      measurementId: "G-C61Y4FG8SV"
+      measurementId: "G-C61Y4FG8SV",
+      databaseURL: "https://fp-project-76c3a-default-rtdb.firebaseio.com/"
     };
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getDatabase(app);
 
     // Handle user registration
-    document.getElementById("register-form").addEventListener("submit", function(event) {
-      event.preventDefault();
+    document.getElementById("register-form").addEventListener("submit", function(e) {
+      e.preventDefault();
 
       const firstName = document.getElementById("first-name").value;
       const lastName = document.getElementById("last-name").value;
+      const username = document.getElementById("username").value;
       const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
       const password = document.getElementById("password").value;
 
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Successful registration
-          alert("Registration successful!");
-          console.log("User:", userCredential.user);
+          // Get user ID from Firebase Authentication
+          const userId = userCredential.user.uid;
 
-          // Redirect to login page after successful sign-up
-          window.location.href = "login.html";
+          // Save user data in Firebase Realtime Database
+          set(ref(db, 'users/' + userId), {
+            firstName: firstName,
+            lastName: lastName,
+            username: username,
+            email: email,
+            phone: phone
+          }).then(() => {
+            alert("Registration successful!");
+            console.log("User data saved!");
+
+            // Redirect to login page after successful sign-up
+            window.location.href = "login.html";
+          }).catch((error) => {
+            alert("Database error: " + error.message);
+          });
         })
         .catch((error) => {
           alert("Error: " + error.message);
